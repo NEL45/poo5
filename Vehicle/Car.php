@@ -1,0 +1,48 @@
+require_once 'Vehicle.php';
+require_once 'LightableInterface.php';
+
+class Car extends Vehicle implements LightableInterface
+{
+    private bool $hasParkBrake = true;
+
+    public function __construct(string $color, int $nbSeats, string $energy)
+    {
+        parent::__construct($color, $nbSeats);
+        $this->setEnergy($energy);
+    }
+
+    public function setHasParkBrake(): void
+    {
+        if ($this->hasParkBrake === true) {
+            $this->hasParkBrake = false;
+        } else {
+            $this->hasParkBrake = true;
+        }
+    }
+
+    public function start (): string
+    {
+        try {
+            if ($this->hasParkBrake === true) {
+                throw new Exception("The handbrake is active<br> Marge says: Homeeeeer!!!! <br>");
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            $this->setHasParkBrake();
+            echo "The handbrake is off<br>";
+        } finally {
+            echo "Homer says: My car rolls like a donut";
+            return parent::start();
+        }
+    }
+
+    public function switchOn(): bool
+    {
+        return true;
+    }
+
+    public function switchOff(): bool
+    {
+        return false;
+    }
+}
